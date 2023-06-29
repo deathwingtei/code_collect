@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async Await And PromiseAll</title>
+</head>
+<body>
+    <div id="main_div">
+
+    </div>
+</body>
+</html>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+    gendoc();
+    document.querySelector("#submitmainform").addEventListener("click", async (e) => {
+	e.preventDefault();
+    const allList = document.querySelectorAll('.showloop').length;
+    const countList = await loopGetFetch();
+    console.log(countList);
+    if(countList == allList)
+    {
+        document.getElementById("main_div").innerHTML += "<br>Success";
+    }
+    else
+    {
+        return false;
+    }
+
+});
+
+});
+
+function gendoc()
+{
+    for (let index = 0; index < 3; index++) {
+        for (let index2 = 0; index2 < 2; index2++) {
+            document.getElementById("main_div").innerHTML +=
+            "<div class='showloop' data-index='"+index+"'  data-count='"+index2+"' id='loop_"+index+"_"+index2+"'>'"+index+"_"+index2+"'</div>";
+        }
+    }
+    document.getElementById("main_div").innerHTML += "<input type='button' id='submitmainform' value='clickme'>"
+}
+
+
+async function loopGetFetch(){
+    let index = 0;
+    let count = 0;
+    let countlist = 0;
+
+    let urlmap = [];
+
+    document.querySelectorAll(".showloop").forEach((thisdata) => {
+        index = thisdata.getAttribute('data-index');
+        count = thisdata.getAttribute('data-count');
+        sendurl = "https://nodethsl.thsl.xyz/api/ranj?index=" + index + "&count="+count;
+        urlmap.push(sendurl);
+    });
+
+    const sendlink = (countlist) => {
+        return Promise.all(
+            urlmap.map(async (url,key) => {
+                console.log(url);
+                const urlParams = (new URL(url)).searchParams;
+                const thisIndex = urlParams.get('index');
+                const thisCount = urlParams.get('count');
+                const returnData = await getDataFromLink(url);
+                if (returnData.success==1&&returnData.status==200) {
+                    countlist++;
+                    console.log(returnData.return);
+                    document.querySelector("#loop_"+thisIndex+"_"+thisCount).innerHTML = returnData.return;
+                } else {
+                    console.log(returnData.return);
+                }
+            })
+        ).then(() => {
+            return countlist;
+        });
+    };
+
+    return await sendlink(countlist);
+
+}
+
+async function getDataFromLink(url = '') {
+	const response = await fetch(url, {
+		method: "GET",
+		headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+		},
+	});
+    return response.json();
+}
+</script>
