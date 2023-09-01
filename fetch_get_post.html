@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Get Post Vanilla Javascript</title>
+</head>
+<body>
+    <div id="main_div">
+
+    </div>
+    <input type="button" id="generate_get" value="Gen_Get">
+    <input type="button" id="generate_post_param" value="Gen_Post_Param">
+    <input type="button" id="generate_post_form" value="Gen_Post">
+</body>
+</html>
+
+<script>
+    const get_url = 'https://nodethsl.thsl.xyz/api/ranj';
+    const post_url = 'https://nodethsl.thsl.xyz/api/random_post';
+
+    document.getElementById("generate_post_param").addEventListener("click", function(e) {
+        let params = 'text=1';
+        fetch(post_url, {
+            method: "POST",
+            // mode: 'no-cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: params,
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            // console.log(data);
+            if (data.success == 1) {
+                var result =  data.return;
+                document.getElementById("main_div").innerHTML = result;
+            } else {
+                alert(data.msg);
+                return false;
+            }
+        });
+        e.preventDefault();
+    });
+
+    document.getElementById("generate_post_form").addEventListener("click", function(e) {
+        let formData = new FormData();
+        formData.append('text', "1");
+        fetch(post_url, {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            // console.log(data);
+            if (data.success == 1) {
+                var result =  data.return;
+                document.getElementById("main_div").innerHTML = result;
+            } else {
+                alert(data.msg);
+                return false;
+            }
+        });
+        e.preventDefault();
+    });
+
+    document.getElementById("generate_get").addEventListener("click", function(e) {
+        fetch(get_url+"?text=1", {
+            method: "GET",
+            headers: {"Content-type": "application/x-www-form-urlencoded"}
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            // console.log(data);
+            if (data.success == 1) {
+                var result =  data.return;
+                document.getElementById("main_div").innerHTML = result;
+            } else {
+                alert(data.msg);
+                return false;
+            }
+        });
+        e.preventDefault();
+    });
+
+</script>
