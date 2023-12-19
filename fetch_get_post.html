@@ -10,8 +10,15 @@
 
     </div>
     <input type="button" id="generate_get" value="Gen_Get">
+    <br>
     <input type="button" id="generate_post_param" value="Gen_Post_Param">
+    <br>
     <input type="button" id="generate_post_form" value="Gen_Post">
+    <br>
+    <form id="send_post_form" action="https://nodethsl.thsl.xyz/api/random_post" method="post">
+        <input type="hidden" name="text" value="1">
+        <input type="submit" value="Send Post Form">
+    </form>
 </body>
 </html>
 
@@ -60,6 +67,28 @@
             if (data.success == 1) {
                 var result =  data.return;
                 document.getElementById("main_div").innerHTML = result;
+            } else {
+                alert(data.msg);
+                return false;
+            }
+        });
+        e.preventDefault();
+    });
+
+    document.getElementById("send_post_form").addEventListener("submit", function(e) {
+        let formData = new FormData( this );
+        const post_url = this.getAttribute("action");
+        fetch(post_url, {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            console.log(data);
+            if (data.success == 1) {
+                var result =  data.return;
+                document.getElementById("main_div").innerHTML = result;
+                return false;
             } else {
                 alert(data.msg);
                 return false;
