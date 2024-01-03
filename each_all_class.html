@@ -9,13 +9,18 @@
     <div id="main_div">
 
     </div>
-    <input type="button" class="btn_each" value="button1">
-    <input type="button" class="btn_each" value="button2">
+    <input type="button" class="btn_each" data-id="1" value="button1">
+    <input type="button" class="btn_each" data-id="2" value="button2">
 </body>
 <script>
     const elements = document.querySelectorAll(".btn_each");
     elements.forEach(element => {
         element.addEventListener("click", function(){
+            //call attribute data-
+            // const dataId = element.dataset.id; // can call link this
+            const dataId = element.getAttribute('data-id'); 
+            console.log(dataId)
+            // set value
             document.querySelector("#main_div").innerHTML += element.value;
         });
     });
