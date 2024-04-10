@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palindromic Test</title>
+</head>
+<body>
+    <fieldset>
+        <legend>Palindromic Test</legend>
+        Test: <br>
+        Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.<br>
+        Example 1:<br>
+        Input: "babad"<br>
+        Output: "bab"<br>
+        Note: "aba" is also a valid answer.<br>
+        Example 2:<br>
+        Input: "cbbd"<br>
+        Output: "bb"<br>
+        <hr>
+        Input : <span id="counttext"></span>
+        <br>
+        <textarea id="input" maxlength="1000" rows="10" cols="100"></textarea>
+        <br>
+        <input type="button" id="submittext" value="Show Output">
+        <hr>
+        Output :
+        <br>
+        <div id="output"></div>
+
+    </fieldset>
+</body>
+<script>
+    let input = document.querySelector("#input");
+
+    input.addEventListener("keyup", function(){
+        document.querySelector("#counttext").innerHTML = input.value.length;
+    });
+
+    document.querySelector("#submittext").addEventListener("click", function(){
+        const s = input.value;
+        // const originalText = (s).replace(/ /g, "");
+        
+        const splitText = s.split("");
+
+        let result = '';
+        let inLoopResult = '';
+
+        // 0-max 1 time, 1-max 1 time, 2-max...
+        for (let index = 0; index < splitText.length; index++) {
+            inLoopResult = loopTxt(splitText,index);
+            if(result.length < inLoopResult.length){
+                result = inLoopResult;
+            }
+        }
+
+        document.querySelector("#output").innerHTML = result;
+    });
+
+    function loopTxt(splitText,start){
+        
+        let tmpText = ''
+
+        let foundText = '';
+
+        let frontText = '';
+        let backText = '';
+
+        let splitForBack = '';
+
+        for (let index = start; index < splitText.length; index++) {
+            backText = '';
+            tmpText += splitText[index];
+
+            frontText = tmpText;
+            splitForBack = tmpText.split("");
+
+            for (let sindex = (splitForBack.length-1); sindex >= 0; sindex--) {
+                backText+=splitForBack[sindex];
+            }
+            if(backText===frontText){
+                if(foundText.length < tmpText.length){
+                    foundText = tmpText;
+                }
+            }
+        }
+
+        return foundText;
+    }
+</script>
+</html>
