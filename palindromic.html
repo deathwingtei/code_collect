@@ -38,8 +38,8 @@
     });
 
     document.querySelector("#submittext").addEventListener("click", function(){
-        const s = input.value;
-        // const originalText = (s).replace(/ /g, "");
+        const s = input.value.toLowerCase();
+        const originalText = (s).replace(/ /g, "");
         
         const splitText = s.split("");
 
